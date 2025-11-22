@@ -1,0 +1,83 @@
+rm -rf migrations/  # حذف مجلد الترحيلات
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade
+
+
+flask db revision --rev-id=f782965d6491
+flask db migrate -m "rewards"
+
+
+rm -rf migrations/versions/*
+flask db upgrade
+
+
+
+
+
+
+# إعادة تعيين كاملة لقاعدة البيانات (حذف وإعادة إنشاء)
+flask reset-db
+flask reset-db --yes  # لتخطي رسالة التأكيد
+
+# تهيئة قاعدة البيانات (إنشاء الجداول فقط)
+flask init-db
+
+# إنشاء migration جديد
+flask fresh-migrate
+flask fresh-migrate -m "وصف التحديث"
+
+# عرض قائمة الجداول
+flask show-tables
+
+# حذف البيانات من جدول محدد أو كل الجداول
+flask clear-table
+flask clear-table -t employees  # حذف بيانات جدول الموظفين فقط
+
+
+
+
+python3 -m venv venv
+source venv/bin/activate
+
+
+
+database:
+
+# إنشاء قاعدة البيانات مباشرة في سطر واحد
+sqlcmd -S localhost -U SA -P 'sql@123456789' -N -C -Q "CREATE DATABASE YourDatabaseName;"
+الخيارات المستخدمة:
+
+-S localhost: عنوان السيرفر
+-U SA: اسم المستخدم
+-P: كلمة المرور
+-N: لا تستخدم التشفير
+-C: يثق بشهادة السيرفر
+-Q: تنفيذ استعلام SQL مباشر
+
+
+rm -rf migrations
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade
+
+
+
+docker:
+# إيقاف الحاويات الموجودة
+docker-compose down
+
+
+docker-compose restart
+
+# إعادة البناء
+docker-compose up -d --build
+
+docker-compose  --env-file .env up -d --build
+
+
+# add config to .ignore
+$ git rm --cached app/config.py
+
+
+pip install -r requirements.txt
