@@ -100,4 +100,4 @@ migrations/
 nginx.conf
 # docker-compose.yml
 
-run.py
+# run.py
