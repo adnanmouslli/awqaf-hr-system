@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
@@ -93,5 +93,15 @@ def create_app():
 
     app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'uploads')
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
+    # Route لخدمة الملفات المرفوعة (الصور، QR Codes، إلخ)
+    @app.route('/uploads/<path:filename>')
+    def uploaded_file(filename):
+        """
+        خدمة الملفات الثابتة من مجلد uploads
+        مثال: /uploads/barcodes/12345_qrcode.png
+        """
+        upload_folder = app.config.get('UPLOAD_FOLDER', 'uploads')
+        return send_from_directory(upload_folder, filename)
 
     return app

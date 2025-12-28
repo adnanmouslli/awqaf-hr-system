@@ -42,4 +42,7 @@ arabic-reshaper==3.0.0
 python-bidi==0.4.2
 
 # Additional Dependencies for PDF Reports
-# Pillow==10.2.0  # For image handling in PDFs
+Pillow==10.2.0  # For image handling in PDFs and QR code generation
+
+# QR Code Generation
+qrcode[pil]==7.4.2  # For generating QR codes with PIL support

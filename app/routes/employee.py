@@ -20,10 +20,30 @@ employee_bp = Blueprint('employee', __name__)
 
 # تحديد المجلدات المسموح بها لحفظ الملفات
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx', 'xlsx', 'xls'}
+ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def allowed_image(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGE_EXTENSIONS
+
+def save_employee_file(file, fingerprint_id, folder_name):
+    """حفظ ملف (صورة أو مستند) للموظف"""
+    if file and file.filename != '' and allowed_image(file.filename):
+        filename = secure_filename(file.filename)
+        unique_filename = f"{fingerprint_id}_{filename}"
+
+        folder_path = os.path.join(current_app.config['UPLOAD_FOLDER'], folder_name)
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+
+        file_path = os.path.join(folder_path, unique_filename)
+        file.save(file_path)
+        return f"/uploads/{folder_name}/{unique_filename}"
+    return None
 
 
 import pandas as pd
@@ -380,9 +400,13 @@ def create_employee(user_id):
     if request.is_json:
         data = request.get_json()
         certificate_file = None
+        logo_file = None
+        photo_file = None
     else:
         data = request.form.to_dict()
         certificate_file = request.files.get('certificates')
+        logo_file = request.files.get('logo')
+        photo_file = request.files.get('photo')
     
     # Validate required fields (adjust based on frontend inputs)
     required_fields = ['fingerprint_id', 'full_name', 'employee_type', 'work_system']
@@ -396,19 +420,25 @@ def create_employee(user_id):
     elif data['employee_type'] == 'temporary' and 'profession' not in data:
         return jsonify({'message': 'Profession is required for temporary employees'}), 400
     
-    # معالجة ملف الشهادة إذا تم تقديمه
+    # معالجة الملفات إذا تم تقديمها
     certificate_path = None
     if certificate_file and certificate_file.filename != '' and allowed_file(certificate_file.filename):
         filename = secure_filename(certificate_file.filename)
         unique_filename = f"{data['fingerprint_id']}_{filename}"
-        
+
         certificates_folder = os.path.join(current_app.config['UPLOAD_FOLDER'], 'certificates')
         if not os.path.exists(certificates_folder):
             os.makedirs(certificates_folder)
-        
+
         file_path = os.path.join(certificates_folder, unique_filename)
         certificate_file.save(file_path)
         certificate_path = f"/uploads/certificates/{unique_filename}"
+
+    # معالجة صورة اللوغو
+    logo_path = save_employee_file(logo_file, data['fingerprint_id'], 'logos')
+
+    # معالجة صورة الموظف
+    photo_path = save_employee_file(photo_file, data['fingerprint_id'], 'photos')
 
     try:
         # دالة مساعدة لمعالجة التواريخ
@@ -436,6 +466,7 @@ def create_employee(user_id):
         joining_date_value = process_date(data.get('date_of_joining'))
         insurance_start_date_value = process_date(data.get('insurance_start_date'))
         insurance_end_date_value = process_date(data.get('insurance_end_date'))
+        card_expiry_date_value = process_date(data.get('card_expiry_date'))
 
         # التحقق من صحة تواريخ التأمين
         if insurance_start_date_value and insurance_end_date_value:
@@ -537,6 +568,13 @@ def create_employee(user_id):
             overtime_multiplier=overtime_multiplier,
             daily_rate=daily_rate,
             hourly_rate=hourly_rate,
+            # حقول الصور والباركود
+            logo_path=logo_path,
+            photo_path=photo_path,
+            # حقول إضافية
+            contact_number=data.get('contact_number'),
+            blood_type=data.get('blood_type'),
+            card_expiry_date=card_expiry_date_value,
         )
         
         # إذا لم يتم تحديد سعر اليوم أو الساعة، احسبهما تلقائياً
@@ -544,7 +582,21 @@ def create_employee(user_id):
             if employee.auto_calculate_rates():
                 # تم الحساب التلقائي بنجاح
                 pass
-        
+
+        # توليد الباركود تلقائياً إذا لم يتم تقديمه
+        if not data.get('barcode'):
+            employee.generate_barcode(
+                upload_folder=current_app.config['UPLOAD_FOLDER'],
+                base_url=current_app.config.get('BASE_URL', 'http://localhost:5000')
+            )
+        else:
+            employee.barcode = data.get('barcode')
+            # توليد صورة الباركود حتى لو كان الباركود مقدماً
+            employee.generate_barcode(
+                upload_folder=current_app.config['UPLOAD_FOLDER'],
+                base_url=current_app.config.get('BASE_URL', 'http://localhost:5000')
+            )
+
         db.session.add(employee)
         db.session.commit()
 
@@ -558,6 +610,14 @@ def create_employee(user_id):
             'overtime_multiplier': float(employee.overtime_multiplier) if employee.overtime_multiplier else 1.5,
             'daily_rate': float(employee.daily_rate) if employee.daily_rate else None,
             'hourly_rate': float(employee.hourly_rate) if employee.hourly_rate else None,
+            # الحقول الجديدة
+            'barcode': employee.barcode,
+            'barcode_image_path': employee.barcode_image_path,
+            'logo_path': employee.logo_path,
+            'photo_path': employee.photo_path,
+            'contact_number': employee.contact_number,
+            'blood_type': employee.blood_type,
+            'card_expiry_date': employee.card_expiry_date.isoformat() if employee.card_expiry_date else None,
         }}), 201
 
     except Exception as e:
@@ -638,8 +698,16 @@ def get_all_employees(user):
             'overtime_multiplier': float(emp.overtime_multiplier) if emp.overtime_multiplier else 1.5,
             'daily_rate': float(emp.daily_rate) if emp.daily_rate else None,
             'hourly_rate': float(emp.hourly_rate) if emp.hourly_rate else None,
+            # حقول الصور والباركود
+            'barcode': emp.barcode,
+            'barcode_image_path': emp.barcode_image_path,
+            'logo_path': emp.logo_path,
+            'photo_path': emp.photo_path,
+            'contact_number': emp.contact_number,
+            'blood_type': emp.blood_type,
+            'card_expiry_date': emp.card_expiry_date.isoformat() if emp.card_expiry_date else None,
         })
-    
+
     return jsonify(result), 200
 
 
@@ -764,6 +832,99 @@ def get_employee(user_id, id):
         'overtime_multiplier': float(employee.overtime_multiplier) if employee.overtime_multiplier else 1.5,
         'daily_rate': float(employee.daily_rate) if employee.daily_rate else None,
         'hourly_rate': float(employee.hourly_rate) if employee.hourly_rate else None,
+        # حقول الصور والباركود
+        'barcode': employee.barcode,
+        'barcode_image_path': employee.barcode_image_path,
+        'logo_path': employee.logo_path,
+        'photo_path': employee.photo_path,
+        'contact_number': employee.contact_number,
+        'blood_type': employee.blood_type,
+        'card_expiry_date': employee.card_expiry_date.isoformat() if employee.card_expiry_date else None,
+    }), 200
+
+
+# Get Employee by Barcode
+@employee_bp.route('/api/employees/barcode/<barcode>', methods=['GET'])
+@token_required
+def get_employee_by_barcode(user_id, barcode):
+    """البحث عن موظف باستخدام الباركود"""
+    employee = Employee.get_by_barcode(barcode)
+
+    if not employee:
+        return jsonify({'message': 'Employee not found with this barcode'}), 404
+
+    # جلب معلومات الفرع والقسم
+    branch_name = None
+    if employee.branch_id:
+        branch = Branch.query.get(employee.branch_id)
+        if branch:
+            branch_name = branch.name
+
+    department_name = None
+    if employee.department_id:
+        department = Department.query.get(employee.department_id)
+        if department:
+            department_name = department.name
+
+    # الحصول على المسمى الوظيفي
+    job_title_name = None
+    if employee.position:
+        from app.models.job_title import JobTitle
+        job_title = JobTitle.query.get(employee.position)
+        if job_title:
+            job_title_name = job_title.title_name
+
+    # الحصول على المهنة
+    profession_name = None
+    if employee.profession_id:
+        from app.models.profession import Profession
+        profession = Profession.query.get(employee.profession_id)
+        if profession:
+            profession_name = profession.name
+
+    return jsonify({
+        'id': employee.id,
+        'fingerprint_id': employee.fingerprint_id,
+        'full_name': employee.full_name,
+        'employee_type': employee.employee_type,
+        'position': job_title_name,
+        'profession': profession_name,
+        'salary': float(employee.salary) if employee.salary else 0,
+        'allowances': float(employee.allowances) if employee.allowances else 0,
+        'insurance_deduction': float(employee.insurance_deduction) if employee.insurance_deduction else 0,
+        'advancePercentage': float(employee.advancePercentage) if employee.advancePercentage else 0,
+        'work_system': employee.work_system,
+        'certificates': employee.certificates,
+        'date_of_birth': employee.date_of_birth.isoformat() if employee.date_of_birth else None,
+        'place_of_birth': employee.place_of_birth,
+        'id_card_number': employee.id_card_number,
+        'national_id': employee.national_id,
+        'residence': employee.residence,
+        'mobile_1': employee.mobile_1,
+        'mobile_2': employee.mobile_2,
+        'mobile_3': employee.mobile_3,
+        'worker_agreement': employee.worker_agreement,
+        'notes': employee.notes,
+        'shift_id': employee.shift_id,
+        'date_of_joining': employee.date_of_joining.isoformat() if employee.date_of_joining else None,
+        'created_at': employee.created_at.isoformat(),
+        'updated_at': employee.updated_at.isoformat(),
+        'branch_id': employee.branch_id,
+        'branch_name': branch_name,
+        'department_id': employee.department_id,
+        'department_name': department_name,
+        # الحقول الجديدة
+        'overtime_multiplier': float(employee.overtime_multiplier) if employee.overtime_multiplier else 1.5,
+        'daily_rate': float(employee.daily_rate) if employee.daily_rate else None,
+        'hourly_rate': float(employee.hourly_rate) if employee.hourly_rate else None,
+        # حقول الصور والباركود
+        'barcode': employee.barcode,
+        'barcode_image_path': employee.barcode_image_path,
+        'logo_path': employee.logo_path,
+        'photo_path': employee.photo_path,
+        'contact_number': employee.contact_number,
+        'blood_type': employee.blood_type,
+        'card_expiry_date': employee.card_expiry_date.isoformat() if employee.card_expiry_date else None,
     }), 200
 
 
@@ -887,6 +1048,19 @@ def update_employee(user_id, id):
             if not employee.hourly_rate and employee.daily_rate:
                 employee.hourly_rate = round(employee.daily_rate / 8, 2)
 
+        # معالجة الحقول الجديدة
+        if 'contact_number' in data:
+            employee.contact_number = data['contact_number']
+
+        if 'blood_type' in data:
+            employee.blood_type = data['blood_type']
+
+        if 'card_expiry_date' in data:
+            employee.card_expiry_date = process_date(data['card_expiry_date'])
+
+        # ملاحظة: الصور (logo, photo) والباركود لا يتم تحديثهم عبر هذا الـ endpoint
+        # يجب إنشاء endpoint منفصل لتحديث الصور إذا لزم الأمر
+
         db.session.commit()
 
         # إرجاع البيانات المحدثة
@@ -910,7 +1084,15 @@ def update_employee(user_id, id):
                 'national_id': employee.national_id,
                 'residence': employee.residence,
                 'date_of_birth': employee.date_of_birth.isoformat() if employee.date_of_birth else None,
-                'place_of_birth': employee.place_of_birth
+                'place_of_birth': employee.place_of_birth,
+                # الحقول الجديدة
+                'contact_number': employee.contact_number,
+                'blood_type': employee.blood_type,
+                'card_expiry_date': employee.card_expiry_date.isoformat() if employee.card_expiry_date else None,
+                'barcode': employee.barcode,
+                'barcode_image_path': employee.barcode_image_path,
+                'logo_path': employee.logo_path,
+                'photo_path': employee.photo_path,
             }
         }), 200
 

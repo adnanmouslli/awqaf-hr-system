@@ -1,0 +1,316 @@
+{
+  "info": {
+    "name": "Create Employee with QR Code - إنشاء موظف مع QR Code",
+    "description": "مثال كامل لإنشاء موظف جديد مع جميع الحقول بما في ذلك الصور و QR Code",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "إنشاء موظف جديد - Create New Employee",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "description": "ضع التوكن الخاص بك هنا"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "fingerprint_id",
+              "value": "12345",
+              "description": "رقم البصمة (مطلوب)",
+              "type": "text"
+            },
+            {
+              "key": "full_name",
+              "value": "أحمد محمد علي السوري",
+              "description": "الاسم الكامل (مطلوب)",
+              "type": "text"
+            },
+            {
+              "key": "employee_type",
+              "value": "permanent",
+              "description": "نوع الموظف: permanent أو temporary (مطلوب)",
+              "type": "text"
+            },
+            {
+              "key": "work_system",
+              "value": "shift",
+              "description": "نظام العمل (مطلوب)",
+              "type": "text"
+            },
+            {
+              "key": "position",
+              "value": "5",
+              "description": "المسمى الوظيفي - ID من جدول job_titles (مطلوب للموظف الدائم)",
+              "type": "text"
+            },
+            {
+              "key": "salary",
+              "value": "5000",
+              "description": "الراتب الأساسي",
+              "type": "text"
+            },
+            {
+              "key": "allowances",
+              "value": "500",
+              "description": "البدلات",
+              "type": "text"
+            },
+            {
+              "key": "insurance_deduction",
+              "value": "200",
+              "description": "خصم التأمينات",
+              "type": "text"
+            },
+            {
+              "key": "advancePercentage",
+              "value": "20",
+              "description": "نسبة السلفة المسموحة",
+              "type": "text"
+            },
+            {
+              "key": "birth_date",
+              "value": "1990-05-15",
+              "description": "تاريخ الميلاد (YYYY-MM-DD)",
+              "type": "text"
+            },
+            {
+              "key": "birth_place",
+              "value": "حلب",
+              "description": "مكان الولادة",
+              "type": "text"
+            },
+            {
+              "key": "id_number",
+              "value": "123456789",
+              "description": "رقم البطاقة",
+              "type": "text"
+            },
+            {
+              "key": "national_id",
+              "value": "01234567890123",
+              "description": "الرقم الوطني",
+              "type": "text"
+            },
+            {
+              "key": "residence",
+              "value": "حلب - حي السبيل",
+              "description": "مكان الإقامة",
+              "type": "text"
+            },
+            {
+              "key": "phone1",
+              "value": "0912345678",
+              "description": "رقم الموبايل الأول",
+              "type": "text"
+            },
+            {
+              "key": "phone2",
+              "value": "0922345678",
+              "description": "رقم الموبايل الثاني",
+              "type": "text"
+            },
+            {
+              "key": "phone3",
+              "value": "0932345678",
+              "description": "رقم الموبايل الثالث (للطوارئ)",
+              "type": "text"
+            },
+            {
+              "key": "date_of_joining",
+              "value": "2024-01-01",
+              "description": "تاريخ التعيين (YYYY-MM-DD)",
+              "type": "text"
+            },
+            {
+              "key": "branch_id",
+              "value": "1",
+              "description": "ID الفرع",
+              "type": "text"
+            },
+            {
+              "key": "department_id",
+              "value": "2",
+              "description": "ID القسم",
+              "type": "text"
+            },
+            {
+              "key": "shift_id",
+              "value": "1",
+              "description": "ID الوردية",
+              "type": "text"
+            },
+            {
+              "key": "insurance_start_date",
+              "value": "2024-01-01",
+              "description": "تاريخ بداية التأمين (YYYY-MM-DD)",
+              "type": "text"
+            },
+            {
+              "key": "insurance_end_date",
+              "value": "2025-12-31",
+              "description": "تاريخ نهاية التأمين (YYYY-MM-DD)",
+              "type": "text"
+            },
+            {
+              "key": "overtime_multiplier",
+              "value": "1.5",
+              "description": "معامل الوقت الإضافي (افتراضي 1.5)",
+              "type": "text"
+            },
+            {
+              "key": "daily_rate",
+              "value": "166.67",
+              "description": "سعر اليوم (يُحسب تلقائياً من الراتب إذا لم يُدخل)",
+              "type": "text"
+            },
+            {
+              "key": "hourly_rate",
+              "value": "20.83",
+              "description": "سعر الساعة (يُحسب تلقائياً من سعر اليوم إذا لم يُدخل)",
+              "type": "text"
+            },
+            {
+              "key": "notes",
+              "value": "موظف متميز - يتحدث الإنجليزية",
+              "description": "ملاحظات إضافية",
+              "type": "text"
+            },
+            {
+              "key": "agreement",
+              "value": "تم توقيع عقد العمل بتاريخ 2024-01-01",
+              "description": "اتفاق العامل",
+              "type": "text"
+            },
+            {
+              "key": "contact_number",
+              "value": "0911222333",
+              "description": "رقم تواصل إضافي (حقل جديد)",
+              "type": "text"
+            },
+            {
+              "key": "blood_type",
+              "value": "A+",
+              "description": "زمرة الدم (حقل جديد) - القيم المسموحة: A+, A-, B+, B-, AB+, AB-, O+, O-",
+              "type": "text"
+            },
+            {
+              "key": "card_expiry_date",
+              "value": "2025-12-31",
+              "description": "تاريخ صلاحية البطاقة (حقل جديد) - YYYY-MM-DD",
+              "type": "text"
+            },
+            {
+              "key": "logo",
+              "description": "صورة اللوغو (حقل جديد) - اختر ملف صورة PNG/JPG",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "photo",
+              "description": "صورة الموظف (حقل جديد) - اختر ملف صورة PNG/JPG",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "certificates",
+              "description": "ملف الشهادات - اختر ملف PDF أو صورة",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/employees",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "employees"
+          ]
+        },
+        "description": "إنشاء موظف جديد مع جميع الحقول بما في ذلك:\n- الحقول الأساسية\n- الصور (logo, photo)\n- QR Code (يتم توليده تلقائياً)\n- الحقول الإضافية الجديدة"
+      },
+      "response": []
+    },
+    {
+      "name": "مثال مبسط - Minimal Example",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "fingerprint_id",
+              "value": "99999",
+              "type": "text"
+            },
+            {
+              "key": "full_name",
+              "value": "محمد أحمد",
+              "type": "text"
+            },
+            {
+              "key": "employee_type",
+              "value": "permanent",
+              "type": "text"
+            },
+            {
+              "key": "work_system",
+              "value": "shift",
+              "type": "text"
+            },
+            {
+              "key": "position",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "salary",
+              "value": "3000",
+              "type": "text"
+            },
+            {
+              "key": "contact_number",
+              "value": "0911111111",
+              "type": "text"
+            },
+            {
+              "key": "blood_type",
+              "value": "O+",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/employees",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "employees"
+          ]
+        },
+        "description": "مثال مبسط يحتوي على الحقول المطلوبة فقط + بعض الحقول الجديدة"
+      },
+      "response": []
+    }
+  ]
+}
