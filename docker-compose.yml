@@ -1,12 +1,10 @@
-
-version: '3.8'
 services:
   backend:
     build: .
     container_name: awqaf_backend
     image: hr_awqaf_backend
     ports:
-      - "3000:3000"
+      - "80:80"
     environment:
       - SQL_SERVER_HOST=awqaf_sqlserver
       - SQL_SERVER_PORT=1433

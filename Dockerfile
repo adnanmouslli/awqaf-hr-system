@@ -26,8 +26,8 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # نسخ سكربت الدخول وجعله قابل للتنفيذ
-COPY entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh
+#COPY entrypoint.sh /app/
+#RUN chmod +x /app/entrypoint.sh
 
 # نسخ باقي الملفات
 COPY . /app/
@@ -40,7 +40,7 @@ ENV FLASK_APP=run.py
 ENV PYTHONUNBUFFERED=1
 
 # تشغيل الـ entrypoint
-ENTRYPOINT ["/app/entrypoint.sh"]
+#ENTRYPOINT ["/app/entrypoint.sh"]
 
 CMD ["python", "run.py"]
 
