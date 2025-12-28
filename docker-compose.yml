@@ -1,0 +1,25 @@
+
+version: '3.8'
+services:
+  backend:
+    build: .
+    container_name: awqaf_backend
+    image: hr_awqaf_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - SQL_SERVER_HOST=awqaf_sqlserver
+      - SQL_SERVER_PORT=1433
+      - SQL_SERVER_DATABASE=awqaf
+      - SQL_SERVER_USERNAME=sa
+      - SQL_SERVER_PASSWORD=awqaf@Pass123
+    networks:
+      - hr_awqaf_network
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+
+networks:
+  hr_awqaf_network:
+    external: true
+

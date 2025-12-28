@@ -96,8 +96,8 @@ config.py
 migrations/
 
 
-Dockerfile
+# Dockerfile
 nginx.conf
-docker-compose.yml
+# docker-compose.yml
 
 run.py
