@@ -57,10 +57,11 @@ def get_id_card_front(current_user, emp_id):
         # تحضير الـ URLs للصور
         base_url = request.host_url.rstrip('/')
         photo_url = get_file_url(employee.photo_path, base_url) if employee.photo_path else None
-        logo_url = get_file_url(employee.logo_path, base_url) if employee.logo_path else None
+        # logo_url = get_file_url(employee.logo_path, base_url) if employee.logo_path else None
 
         # صورة شعار الجمهورية (يمكن تخزينها في مجلد ثابت)
         republic_logo_url = f"{base_url}/uploads/Syrian_Arab_Republic.png"
+        logo_url = f"{base_url}/uploads/logo.png"
 
         # عرض القالب
         return render_template(
@@ -101,11 +102,12 @@ def get_id_card_back(current_user, emp_id):
 
         # تحضير الـ URLs للصور
         base_url = request.host_url.rstrip('/')
-        logo_url = get_file_url(employee.logo_path, base_url) if employee.logo_path else None
+        # logo_url = get_file_url(employee.logo_path, base_url) if employee.logo_path else None
         qr_code_url = get_file_url(employee.barcode_image_path, base_url) if employee.barcode_image_path else None
 
         # صورة شعار الجمهورية
         republic_logo_url = f"{base_url}/uploads/Syrian_Arab_Republic.png"
+        logo_url = f"{base_url}/uploads/logo.png"
 
         # عرض القالب
         return render_template(

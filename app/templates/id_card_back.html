@@ -384,8 +384,10 @@
 
                 <!-- شعار الوزارة في أقصى اليسار -->
                 <div class="logo-container">
-                    <img src="http://localhost:5000/uploads//logo.png" alt="شعار الوزارة" onerror="this.style.display='none'">
-                </div>
+                    {% if logo_url %}
+                    <img src="{{ logo_url }}" alt="الجمهورية العربية السورية" alt="شعار الوزارة" onerror="this.style.display='none'">
+                    {% endif %}     
+               </div>
             </div>
         </div>
 
