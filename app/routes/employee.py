@@ -415,10 +415,10 @@ def create_employee(user_id):
         return jsonify({'message': f'Missing fields: {", ".join(missing_fields)}'}), 400    
     
     # Additional validation based on employee type
-    if data['employee_type'] == 'permanent' and 'position' not in data:
-        return jsonify({'message': 'Position is required for permanent employees'}), 400
-    elif data['employee_type'] == 'temporary' and 'profession' not in data:
-        return jsonify({'message': 'Profession is required for temporary employees'}), 400
+    # if data['employee_type'] == 'permanent' and 'position' not in data:
+    #     return jsonify({'message': 'Position is required for permanent employees'}), 400
+    # elif data['employee_type'] == 'temporary' and 'profession' not in data:
+    #     return jsonify({'message': 'Profession is required for temporary employees'}), 400
     
     # معالجة الملفات إذا تم تقديمها
     certificate_path = None
@@ -534,14 +534,14 @@ def create_employee(user_id):
         hourly_rate = process_numeric(data.get('hourly_rate'), None) if data.get('hourly_rate') else None
         
         shift_id = process_integer(data.get('shift_id'))
-        profession_id = process_integer(data.get('profession')) if data['employee_type'] == 'temporary' else None
+        # profession_id = process_integer(data.get('profession')) if data['employee_type'] == 'temporary' else None
 
         employee = Employee(
             fingerprint_id=data['fingerprint_id'],
             full_name=data['full_name'],
-            employee_type=data['employee_type'],
+            employee_type=data.get('employee_type'),
             position=data.get('position') if data['employee_type'] == 'permanent' else None,
-            profession_id=profession_id,
+            # profession_id=profession_id,
             salary=salary_value,
             advancePercentage=advance_percentage,
             work_system=data['work_system'],
@@ -827,7 +827,7 @@ def get_employee(user_id, id):
         'branch_name': branch_name,
         'department_id': employee.department_id,
         'department_name': department_name,
-        'is_department_head': employee.is_department_head,
+        'is_department_head': employee.is_department_head(),
         # الحقول الجديدة
         'overtime_multiplier': float(employee.overtime_multiplier) if employee.overtime_multiplier else 1.5,
         'daily_rate': float(employee.daily_rate) if employee.daily_rate else None,
@@ -935,34 +935,47 @@ def get_employee_by_barcode(user_id, barcode):
 @token_required
 def update_employee(user_id, id):
     employee = Employee.query.get(id)
-    
+
     if not employee:
         return jsonify({'message': 'Employee not found'}), 404
 
-    data = request.get_json()
-    
+    # الحصول على البيانات من JSON أو FormData
+    if request.is_json:
+        data = request.get_json()
+        certificate_file = None
+        logo_file = None
+        photo_file = None
+    else:
+        data = request.form.to_dict()
+        certificate_file = request.files.get('certificates')
+        logo_file = request.files.get('logo')
+        photo_file = request.files.get('photo')
+
     try:
         # دالة مساعدة لمعالجة التواريخ
         def process_date(date_value):
-            if not date_value or date_value == 'null' or date_value == '':
+            if not date_value or date_value == 'null' or date_value == '' or str(date_value).lower() == 'nat':
                 return None
             try:
                 if isinstance(date_value, str):
                     from datetime import datetime
-                    date_formats = ['%Y-%m-%d', '%d/%m/%Y', '%m/%d/%Y']
+                    date_formats = ['%Y-%m-%d', '%d/%m/%Y', '%m/%d/%Y', '%Y-%m-%d %H:%M:%S']
                     for fmt in date_formats:
                         try:
                             return datetime.strptime(date_value, fmt).date()
                         except ValueError:
                             continue
                     return None
-                return date_value
+                elif hasattr(date_value, 'date'):
+                    return date_value.date() if hasattr(date_value, 'date') else date_value
+                else:
+                    return None
             except:
                 return None
 
         # دالة مساعدة لمعالجة الأرقام
-        def process_numeric(value, default=None):
-            if value is None or value == '' or value == 'null':
+        def process_numeric(value, default=0):
+            if not value or value == 'null' or value == '':
                 return default
             try:
                 return float(value)
@@ -970,7 +983,7 @@ def update_employee(user_id, id):
                 return default
 
         def process_integer(value, default=None):
-            if value is None or value == '' or value == 'null':
+            if not value or value == 'null' or value == '':
                 return default
             try:
                 return int(value)
@@ -980,73 +993,132 @@ def update_employee(user_id, id):
         # تحديث الحقول الأساسية
         if 'fingerprint_id' in data:
             employee.fingerprint_id = data['fingerprint_id']
-        
+
         if 'full_name' in data:
             employee.full_name = data['full_name']
-        
+
         if 'employee_type' in data:
             employee.employee_type = data['employee_type']
-        
+
         if 'position' in data:
-            employee.position = data['position']
-        
-        if 'mobile_1' in data:
-            employee.mobile_1 = data['mobile_1']
-        
+            employee.position = data.get('position') if data['employee_type'] == 'permanent' else None
+
+        # معالجة المهنة للموظف المؤقت
+        if 'profession' in data:
+            employee.profession_id = process_integer(data.get('profession')) if data.get('employee_type') == 'temporary' else None
+
+        # تحديث معلومات الاتصال
+        if 'mobile_1' in data or 'phone1' in data:
+            employee.mobile_1 = data.get('mobile_1') or data.get('phone1')
+
+        if 'mobile_2' in data or 'phone2' in data:
+            employee.mobile_2 = data.get('mobile_2') or data.get('phone2')
+
+        if 'mobile_3' in data or 'phone3' in data:
+            employee.mobile_3 = data.get('mobile_3') or data.get('phone3')
+
         if 'national_id' in data:
             employee.national_id = data['national_id']
-        
+
+        if 'id_card_number' in data or 'id_number' in data:
+            employee.id_card_number = data.get('id_card_number') or data.get('id_number')
+
         if 'residence' in data:
             employee.residence = data['residence']
-        
-        # معالجة الحقول المالية للموظفين الدائمين
-        if employee.employee_type == 'permanent':
-            if 'salary' in data:
-                employee.salary = process_numeric(data['salary'], 0)
-            
-            if 'allowances' in data:
-                employee.allowances = process_numeric(data['allowances'], 0)
-            
-            if 'advancePercentage' in data:
-                employee.advancePercentage = process_numeric(data['advancePercentage'], 0)
-            
-            # معالجة الحقول الجديدة للإضافي
-            if 'overtime_multiplier' in data:
-                employee.overtime_multiplier = process_numeric(data['overtime_multiplier'], 1.5)
-            
-            if 'daily_rate' in data:
-                employee.daily_rate = process_numeric(data['daily_rate'])
-            
-            if 'hourly_rate' in data:
-                employee.hourly_rate = process_numeric(data['hourly_rate'])
-            
-            # معالجة التواريخ
-            if 'date_of_birth' in data:
-                employee.date_of_birth = process_date(data['date_of_birth'])
-            
-            if 'place_of_birth' in data:
-                employee.place_of_birth = data['place_of_birth']
+
+        # معالجة الحقول المالية
+        if 'salary' in data:
+            employee.salary = process_numeric(data['salary'], 0)
+
+        if 'allowances' in data:
+            employee.allowances = process_numeric(data['allowances'], 0)
+
+        if 'insurance_deduction' in data:
+            employee.insurance_deduction = process_numeric(data['insurance_deduction'], 0)
+
+        if 'advancePercentage' in data:
+            employee.advancePercentage = process_numeric(data['advancePercentage'], 0)
+
+        # معالجة الحقول الجديدة للإضافي
+        if 'overtime_multiplier' in data:
+            employee.overtime_multiplier = process_numeric(data['overtime_multiplier'], 1.5)
+
+        if 'daily_rate' in data:
+            employee.daily_rate = process_numeric(data['daily_rate'], None) if data.get('daily_rate') else None
+
+        if 'hourly_rate' in data:
+            employee.hourly_rate = process_numeric(data['hourly_rate'], None) if data.get('hourly_rate') else None
+
+        # معالجة التواريخ
+        if 'date_of_birth' in data or 'birth_date' in data:
+            employee.date_of_birth = process_date(data.get('date_of_birth') or data.get('birth_date'))
+
+        if 'place_of_birth' in data or 'birth_place' in data:
+            employee.place_of_birth = data.get('place_of_birth') or data.get('birth_place')
+
+        if 'date_of_joining' in data:
+            employee.date_of_joining = process_date(data.get('date_of_joining'))
+
+        if 'insurance_start_date' in data:
+            employee.insurance_start_date = process_date(data.get('insurance_start_date'))
+
+        if 'insurance_end_date' in data:
+            employee.insurance_end_date = process_date(data.get('insurance_end_date'))
+
+        # التحقق من صحة تواريخ التأمين
+        if employee.insurance_start_date and employee.insurance_end_date:
+            if employee.insurance_start_date > employee.insurance_end_date:
+                return jsonify({'message': 'تاريخ بداية التأمين يجب أن يكون قبل تاريخ النهاية'}), 400
 
         # معالجة نظام العمل والوردية
         if 'work_system' in data:
             employee.work_system = data['work_system']
-            
-            # إذا كان نظام العمل وردية، تحديث الوردية
-            if data['work_system'] == 'shift' and 'shift' in data:
-                employee.shift_id = process_integer(data['shift'])
-            elif data['work_system'] != 'shift':
-                # إذا تم تغيير نظام العمل من وردية إلى شيء آخر، إزالة الوردية
-                employee.shift_id = None
 
-        # حساب تلقائي للمعدلات إذا لم يتم تحديدها
-        if employee.employee_type == 'permanent' and employee.salary:
-            # حساب سعر اليوم إذا لم يتم تحديده
-            if not employee.daily_rate:
-                employee.daily_rate = round(employee.salary / 30, 2)
-            
-            # حساب سعر الساعة إذا لم يتم تحديده
-            if not employee.hourly_rate and employee.daily_rate:
-                employee.hourly_rate = round(employee.daily_rate / 8, 2)
+        if 'shift_id' in data or 'shift' in data:
+            employee.shift_id = process_integer(data.get('shift_id') or data.get('shift'))
+
+        # معالجة الفرع والقسم
+        if 'branch_id' in data:
+            branch_id = None
+            if data['branch_id'] and data['branch_id'] != 'null' and str(data['branch_id']).strip():
+                try:
+                    branch_id = int(data['branch_id'])
+                except (ValueError, TypeError):
+                    branch_id = None
+
+            if branch_id:
+                branch = Branch.query.get(branch_id)
+                if not branch:
+                    return jsonify({'message': 'الفرع غير موجود'}), 400
+            employee.branch_id = branch_id
+
+        if 'department_id' in data:
+            department_id = None
+            if data['department_id'] and data['department_id'] != 'null' and str(data['department_id']).strip():
+                try:
+                    department_id = int(data['department_id'])
+                except (ValueError, TypeError):
+                    department_id = None
+
+            if department_id:
+                department = Department.query.get(department_id)
+                if not department:
+                    return jsonify({'message': 'القسم غير موجود'}), 400
+
+                if employee.branch_id:
+                    branch_dept_rel = BranchDepartment.query.filter_by(
+                        branch_id=employee.branch_id, department_id=department_id
+                    ).first()
+                    if not branch_dept_rel:
+                        return jsonify({'message': 'القسم غير متوفر في الفرع المحدد'}), 400
+            employee.department_id = department_id
+
+        # معالجة الملاحظات والاتفاقيات
+        if 'notes' in data:
+            employee.notes = data.get('notes')
+
+        if 'worker_agreement' in data or 'agreement' in data:
+            employee.worker_agreement = data.get('worker_agreement') or data.get('agreement')
 
         # معالجة الحقول الجديدة
         if 'contact_number' in data:
@@ -1058,8 +1130,34 @@ def update_employee(user_id, id):
         if 'card_expiry_date' in data:
             employee.card_expiry_date = process_date(data['card_expiry_date'])
 
-        # ملاحظة: الصور (logo, photo) والباركود لا يتم تحديثهم عبر هذا الـ endpoint
-        # يجب إنشاء endpoint منفصل لتحديث الصور إذا لزم الأمر
+        # معالجة الملفات إذا تم تقديمها
+        if certificate_file and certificate_file.filename != '' and allowed_file(certificate_file.filename):
+            filename = secure_filename(certificate_file.filename)
+            unique_filename = f"{employee.fingerprint_id}_{filename}"
+
+            certificates_folder = os.path.join(current_app.config['UPLOAD_FOLDER'], 'certificates')
+            if not os.path.exists(certificates_folder):
+                os.makedirs(certificates_folder)
+
+            file_path = os.path.join(certificates_folder, unique_filename)
+            certificate_file.save(file_path)
+            employee.certificates = f"/uploads/certificates/{unique_filename}"
+
+        # معالجة صورة اللوغو
+        logo_path = save_employee_file(logo_file, employee.fingerprint_id, 'logos')
+        if logo_path:
+            employee.logo_path = logo_path
+
+        # معالجة صورة الموظف
+        photo_path = save_employee_file(photo_file, employee.fingerprint_id, 'photos')
+        if photo_path:
+            employee.photo_path = photo_path
+
+        # حساب تلقائي للمعدلات إذا لم يتم تحديدها
+        if not employee.daily_rate or not employee.hourly_rate:
+            if employee.auto_calculate_rates():
+                # تم الحساب التلقائي بنجاح
+                pass
 
         db.session.commit()
 
@@ -1072,8 +1170,10 @@ def update_employee(user_id, id):
                 'full_name': employee.full_name,
                 'employee_type': employee.employee_type,
                 'position': employee.position,
+                'profession_id': employee.profession_id,
                 'salary': float(employee.salary) if employee.salary else 0,
                 'allowances': float(employee.allowances) if employee.allowances else 0,
+                'insurance_deduction': float(employee.insurance_deduction) if employee.insurance_deduction else 0,
                 'advancePercentage': float(employee.advancePercentage) if employee.advancePercentage else 0,
                 'overtime_multiplier': float(employee.overtime_multiplier) if employee.overtime_multiplier else 1.5,
                 'daily_rate': float(employee.daily_rate) if employee.daily_rate else None,
@@ -1081,10 +1181,21 @@ def update_employee(user_id, id):
                 'work_system': employee.work_system,
                 'shift_id': employee.shift_id,
                 'mobile_1': employee.mobile_1,
+                'mobile_2': employee.mobile_2,
+                'mobile_3': employee.mobile_3,
                 'national_id': employee.national_id,
+                'id_card_number': employee.id_card_number,
                 'residence': employee.residence,
                 'date_of_birth': employee.date_of_birth.isoformat() if employee.date_of_birth else None,
                 'place_of_birth': employee.place_of_birth,
+                'date_of_joining': employee.date_of_joining.isoformat() if employee.date_of_joining else None,
+                'insurance_start_date': employee.insurance_start_date.isoformat() if employee.insurance_start_date else None,
+                'insurance_end_date': employee.insurance_end_date.isoformat() if employee.insurance_end_date else None,
+                'branch_id': employee.branch_id,
+                'department_id': employee.department_id,
+                'notes': employee.notes,
+                'worker_agreement': employee.worker_agreement,
+                'certificates': employee.certificates,
                 # الحقول الجديدة
                 'contact_number': employee.contact_number,
                 'blood_type': employee.blood_type,
