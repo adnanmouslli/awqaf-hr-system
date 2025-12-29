@@ -1,0 +1,350 @@
+{
+  "info": {
+    "name": "Update Employee - تعديل موظف",
+    "description": "مثال كامل لتعديل موظف موجود مع جميع الحقول بما في ذلك الصور",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "تعديل موظف - Update Employee",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "description": "ضع التوكن الخاص بك هنا"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "fingerprint_id",
+              "value": "12345",
+              "description": "رقم البصمة",
+              "type": "text"
+            },
+            {
+              "key": "full_name",
+              "value": "أحمد محمد علي السوري المُحدَّث",
+              "description": "الاسم الكامل",
+              "type": "text"
+            },
+            {
+              "key": "employee_type",
+              "value": "permanent",
+              "description": "نوع الموظف: permanent أو temporary",
+              "type": "text"
+            },
+            {
+              "key": "work_system",
+              "value": "shift",
+              "description": "نظام العمل",
+              "type": "text"
+            },
+            {
+              "key": "position",
+              "value": "5",
+              "description": "المسمى الوظيفي - ID من جدول job_titles (للموظف الدائم)",
+              "type": "text"
+            },
+            {
+              "key": "profession",
+              "value": "3",
+              "description": "المهنة - ID من جدول professions (للموظف المؤقت)",
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "salary",
+              "value": "6000",
+              "description": "الراتب الأساسي المُحدَّث",
+              "type": "text"
+            },
+            {
+              "key": "allowances",
+              "value": "600",
+              "description": "البدلات المُحدَّثة",
+              "type": "text"
+            },
+            {
+              "key": "insurance_deduction",
+              "value": "250",
+              "description": "خصم التأمينات المُحدَّث",
+              "type": "text"
+            },
+            {
+              "key": "advancePercentage",
+              "value": "25",
+              "description": "نسبة السلفة المسموحة المُحدَّثة",
+              "type": "text"
+            },
+            {
+              "key": "birth_date",
+              "value": "1990-05-15",
+              "description": "تاريخ الميلاد (YYYY-MM-DD)",
+              "type": "text"
+            },
+            {
+              "key": "birth_place",
+              "value": "حلب - سوريا",
+              "description": "مكان الولادة المُحدَّث",
+              "type": "text"
+            },
+            {
+              "key": "id_number",
+              "value": "123456789",
+              "description": "رقم البطاقة",
+              "type": "text"
+            },
+            {
+              "key": "national_id",
+              "value": "01234567890123",
+              "description": "الرقم الوطني",
+              "type": "text"
+            },
+            {
+              "key": "residence",
+              "value": "حلب - حي الفرقان",
+              "description": "مكان الإقامة المُحدَّث",
+              "type": "text"
+            },
+            {
+              "key": "phone1",
+              "value": "0912345678",
+              "description": "رقم الموبايل الأول",
+              "type": "text"
+            },
+            {
+              "key": "phone2",
+              "value": "0922345678",
+              "description": "رقم الموبايل الثاني",
+              "type": "text"
+            },
+            {
+              "key": "phone3",
+              "value": "0932345678",
+              "description": "رقم الموبايل الثالث (للطوارئ)",
+              "type": "text"
+            },
+            {
+              "key": "date_of_joining",
+              "value": "2024-01-01",
+              "description": "تاريخ التعيين (YYYY-MM-DD)",
+              "type": "text"
+            },
+            {
+              "key": "branch_id",
+              "value": "2",
+              "description": "ID الفرع المُحدَّث",
+              "type": "text"
+            },
+            {
+              "key": "department_id",
+              "value": "3",
+              "description": "ID القسم المُحدَّث",
+              "type": "text"
+            },
+            {
+              "key": "shift_id",
+              "value": "2",
+              "description": "ID الوردية المُحدَّثة",
+              "type": "text"
+            },
+            {
+              "key": "insurance_start_date",
+              "value": "2024-02-01",
+              "description": "تاريخ بداية التأمين المُحدَّث (YYYY-MM-DD)",
+              "type": "text"
+            },
+            {
+              "key": "insurance_end_date",
+              "value": "2026-01-31",
+              "description": "تاريخ نهاية التأمين المُحدَّث (YYYY-MM-DD)",
+              "type": "text"
+            },
+            {
+              "key": "overtime_multiplier",
+              "value": "2.0",
+              "description": "معامل الوقت الإضافي المُحدَّث",
+              "type": "text"
+            },
+            {
+              "key": "daily_rate",
+              "value": "200",
+              "description": "سعر اليوم المُحدَّث (يُحسب تلقائياً من الراتب إذا لم يُدخل)",
+              "type": "text"
+            },
+            {
+              "key": "hourly_rate",
+              "value": "25",
+              "description": "سعر الساعة المُحدَّث (يُحسب تلقائياً من سعر اليوم إذا لم يُدخل)",
+              "type": "text"
+            },
+            {
+              "key": "notes",
+              "value": "موظف متميز - تم ترقيته - يتحدث الإنجليزية والفرنسية",
+              "description": "ملاحظات إضافية مُحدَّثة",
+              "type": "text"
+            },
+            {
+              "key": "agreement",
+              "value": "تم تجديد عقد العمل بتاريخ 2025-01-01",
+              "description": "اتفاق العامل المُحدَّث",
+              "type": "text"
+            },
+            {
+              "key": "contact_number",
+              "value": "0911333444",
+              "description": "رقم تواصل إضافي مُحدَّث",
+              "type": "text"
+            },
+            {
+              "key": "blood_type",
+              "value": "A+",
+              "description": "زمرة الدم - القيم المسموحة: A+, A-, B+, B-, AB+, AB-, O+, O-",
+              "type": "text"
+            },
+            {
+              "key": "card_expiry_date",
+              "value": "2027-12-31",
+              "description": "تاريخ صلاحية البطاقة المُحدَّث (YYYY-MM-DD)",
+              "type": "text"
+            },
+            {
+              "key": "logo",
+              "description": "صورة اللوغو الجديدة - اختر ملف صورة PNG/JPG (اختياري)",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "photo",
+              "description": "صورة الموظف الجديدة - اختر ملف صورة PNG/JPG (اختياري)",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "certificates",
+              "description": "ملف الشهادات الجديد - اختر ملف PDF أو صورة (اختياري)",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/employees/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "employees",
+            "1"
+          ]
+        },
+        "description": "تعديل موظف موجود مع جميع الحقول.\n\nملاحظات مهمة:\n- قم بتغيير الرقم 1 في نهاية الـ URL إلى ID الموظف المراد تعديله\n- يمكنك إرسال الحقول التي تريد تعديلها فقط (لا حاجة لإرسال جميع الحقول)\n- إذا أرسلت ملفات جديدة (logo, photo, certificates)، سيتم استبدال القديمة\n- الباركود لا يتم تعديله عبر هذا الـ endpoint"
+      },
+      "response": []
+    },
+    {
+      "name": "تعديل جزئي - Partial Update",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "full_name",
+              "value": "أحمد محمد - اسم جديد",
+              "type": "text"
+            },
+            {
+              "key": "salary",
+              "value": "7000",
+              "type": "text"
+            },
+            {
+              "key": "allowances",
+              "value": "700",
+              "type": "text"
+            },
+            {
+              "key": "phone1",
+              "value": "0911111111",
+              "type": "text"
+            },
+            {
+              "key": "residence",
+              "value": "حلب - حي جديد",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/employees/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "employees",
+            "1"
+          ]
+        },
+        "description": "مثال لتعديل بعض الحقول فقط دون الحاجة لإرسال جميع البيانات.\n\nهذا المثال يُحدث فقط:\n- الاسم الكامل\n- الراتب\n- البدلات\n- رقم الهاتف\n- مكان الإقامة\n\nباقي الحقول تبقى كما هي دون تغيير."
+      },
+      "response": []
+    },
+    {
+      "name": "تعديل بيانات JSON - JSON Update",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"أحمد محمد علي المُحدَّث\",\n  \"salary\": 6500,\n  \"allowances\": 650,\n  \"insurance_deduction\": 250,\n  \"advancePercentage\": 25,\n  \"residence\": \"حلب - حي المحافظة\",\n  \"phone1\": \"0912345678\",\n  \"phone2\": \"0922345678\",\n  \"branch_id\": 2,\n  \"department_id\": 3,\n  \"shift_id\": 2,\n  \"overtime_multiplier\": 2.0,\n  \"daily_rate\": 216.67,\n  \"hourly_rate\": 27.08,\n  \"contact_number\": \"0911222333\",\n  \"blood_type\": \"A+\",\n  \"notes\": \"موظف ممتاز - تم التحديث\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/employees/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "employees",
+            "1"
+          ]
+        },
+        "description": "مثال لتعديل الموظف باستخدام JSON بدلاً من FormData.\n\nملاحظة: عند استخدام JSON، لا يمكن إرسال ملفات (logo, photo, certificates).\nإذا كنت بحاجة لتحديث الملفات، استخدم FormData."
+      },
+      "response": []
+    }
+  ]
+}
