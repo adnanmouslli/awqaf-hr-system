@@ -140,19 +140,21 @@ class Employee(db.Model):
             return True
         return False
 
-    def generate_barcode(self, upload_folder=None, base_url="http://localhost:5000"):
+    def generate_barcode(self, upload_folder=None, base_url=None):
         """توليد QR Code فريد للموظف وحفظه كصورة
 
         Args:
             upload_folder: مجلد الرفع لحفظ صورة QR Code
-            base_url: رابط الموقع الأساسي (يمكن تغييره لاحقاً)
+            base_url: رابط الموقع الأساسي (يتم جلبه من config إذا لم يتم تحديده)
 
         Returns:
             str: الباركود النصي الفريد
         """
         import uuid
         import os
-
+        
+        print(base_url)
+        print("===============================")
         if not self.barcode:
             # توليد باركود فريد باستخدام fingerprint_id + UUID
             self.barcode = f"EMP-{self.fingerprint_id}-{uuid.uuid4().hex[:8].upper()}"
@@ -168,11 +170,15 @@ class Employee(db.Model):
                 if not os.path.exists(barcode_folder):
                     os.makedirs(barcode_folder)
 
-                # إنشاء رابط URL للموظف
-                # سيتم استخدام id الموظف بعد حفظه في قاعدة البيانات
-                # في حالة الموظف الجديد، سنستخدم fingerprint_id مؤقتاً
-                employee_url = f"{base_url}/employee/{self.id if self.id else self.fingerprint_id}"
-
+                # # إذا لم يتم توفير base_url، استخدم القيمة الافتراضية
+                # if not base_url:
+                #     base_url = "http://localhost:5000"
+                
+                # إنشاء رابط URL للموظف باستخدام الباركود الفريد
+                employee_url = f"{base_url}/employee/{self.barcode}"
+                print("employee_url: ")
+                print(employee_url)
+                
                 # توليد QR Code
                 qr = qrcode.QRCode(
                     version=1,  # حجم QR Code (1-40)

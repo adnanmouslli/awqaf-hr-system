@@ -1631,3 +1631,91 @@ def remove_employee_assignment(current_user, emp_id):
             'message': 'حدث خطأ أثناء إزالة تعيين الموظف',
             'error': str(e)
         }), 500
+
+
+# ============================================
+# Public Endpoint - غير محمي بتوكن
+# ============================================
+
+@employee_bp.route('/api/public/employees/<barcode>', methods=['GET'])
+def get_employee_public_info(barcode):
+    """
+    جلب معلومات عامة محدودة عن الموظف - بدون حماية (للاستخدام مع QR Code)
+
+    هذا الـ endpoint غير محمي بتوكن ويعرض معلومات محدودة وغير حساسة فقط
+    المعلومات الحساسة مثل الراتب والهاتف والرقم الوطني لا يتم عرضها
+
+    Args:
+        barcode: الباركود الفريد للموظف (مثل: EMP-12345-A1B2C3D4)
+    """
+    # البحث عن الموظف باستخدام الباركود
+    employee = Employee.get_by_barcode(barcode)
+
+    if not employee:
+        return jsonify({'message': 'الموظف غير موجود'}), 404
+
+    # جلب معلومات الفرع والقسم
+    branch_name = None
+    if employee.branch_id:
+        branch = Branch.query.get(employee.branch_id)
+        if branch:
+            branch_name = branch.name
+
+    department_name = None
+    if employee.department_id:
+        department = Department.query.get(employee.department_id)
+        if department:
+            department_name = department.name
+
+    # الحصول على المسمى الوظيفي
+    job_title_name = None
+    if employee.position:
+        from app.models.job_title import JobTitle
+        job_title = JobTitle.query.get(employee.position)
+        if job_title:
+            job_title_name = job_title.title_name
+
+    # الحصول على المهنة
+    profession_name = None
+    if employee.profession_id:
+        from app.models.profession import Profession
+        profession = Profession.query.get(employee.profession_id)
+        if profession:
+            profession_name = profession.name
+
+    # إرجاع معلومات عامة فقط - بدون معلومات حساسة
+    return jsonify({
+        'id': employee.id,
+        'fingerprint_id': employee.fingerprint_id,
+        'full_name': employee.full_name,
+        'employee_type': employee.employee_type,
+        'position': job_title_name,
+        'profession': profession_name,
+        'work_system': employee.work_system,
+        'date_of_birth': employee.date_of_birth.isoformat() if employee.date_of_birth else None,
+        'place_of_birth': employee.place_of_birth,
+        'work_location': employee.work_location,
+        'division_section': employee.division_section,
+        'branch_id': employee.branch_id,
+        'branch_name': branch_name,
+        'department_id': employee.department_id,
+        'department_name': department_name,
+        'photo_path': employee.photo_path,
+        'logo_path': employee.logo_path,
+        'barcode': employee.barcode,
+        'barcode_image_path': employee.barcode_image_path,
+        'blood_type': employee.blood_type,
+        'date_of_joining': employee.date_of_joining.isoformat() if employee.date_of_joining else None,
+        # ملاحظة: المعلومات الحساسة التالية لا يتم عرضها:
+        # - salary (الراتب)
+        # - allowances (البدلات)
+        # - insurance_deduction (خصم التأمين)
+        # - advancePercentage (نسبة السلفة)
+        # - mobile_1, mobile_2, mobile_3 (أرقام الهاتف)
+        # - national_id (الرقم الوطني)
+        # - id_card_number (رقم البطاقة)
+        # - residence (العنوان)
+        # - daily_rate, hourly_rate (الأجور)
+        # - certificates (الشهادات)
+        # - notes (الملاحظات)
+    }), 200
