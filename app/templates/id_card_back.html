@@ -38,11 +38,12 @@
             justify-content: center;
         }
 
+        /* نفس حجم البطاقة الأمامية: 1011px × 638px */
         .id-card-back {
-            width: 1050px;
-            height: 650px;
+            width: 1011px;
+            height: 638px;
             background: #edebe0;
-            border-radius: 20px;
+            border-radius: 15px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
             position: relative;
             overflow: hidden;
@@ -64,42 +65,14 @@
             z-index: 0;
         }
 
-        /* شريط علوي بألوان العلم */
-        .flag-stripe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg,
-                    #022423 0%, #022423 33.33%,
-                    #ffffff 33.33%, #ffffff 66.66%,
-                    #000000 66.66%, #000000 100%);
-            z-index: 4;
-        }
-
-        /* شريط سفلي بألوان العلم */
-        .flag-stripe-bottom {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg,
-                    #022423 0%, #022423 33.33%,
-                    #ffffff 33.33%, #ffffff 66.66%,
-                    #000000 66.66%, #000000 100%);
-            z-index: 4;
-        }
-
-        /* الرأسية */
+        /* الرأسية - نفس الأمامية */
         .card-header {
             background: linear-gradient(135deg, #022423 0%, #034544 50%, #022423 100%);
-            height: 140px;
+            height: 125px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 50px;
+            padding: 0 45px;
             position: relative;
             z-index: 2;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
@@ -122,7 +95,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            gap: 40px;
+            gap: 35px;
             position: relative;
         }
 
@@ -133,7 +106,7 @@
         }
 
         .republic-logo {
-            height: 50px;
+            height: 45px;
             object-fit: contain;
             filter: brightness(1.1) drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
         }
@@ -142,30 +115,30 @@
         .logo-container {
             position: absolute;
             left: 0;
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .logo-container img {
-            max-width: 110px;
-            max-height: 110px;
+            max-width: 100px;
+            max-height: 100px;
             object-fit: contain;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
         /* محتوى الوجه الخلفي */
         .back-content {
-            padding: 30px 50px;
+            padding: 35px 45px 25px 45px;
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             flex: 1;
             position: relative;
             z-index: 2;
-            gap: 40px;
+            gap: 35px;
         }
 
         /* قسم المعلومات على اليمين */
@@ -173,60 +146,19 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 25px;
-        }
-
-        /* قسم الملاحظات في الأعلى */
-        .notes-section {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 18px 22px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-            border-right: 3px solid #bba67b;
-        }
-
-        .notes-title {
-            color: #022423;
-            font-weight: 700;
-            font-size: 17px;
-            margin-bottom: 10px;
-            font-family: 'Qamara', 'Cairo', sans-serif;
-        }
-
-        .notes-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .notes-list li {
-            color: #2c3e50;
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.7;
-            padding-right: 12px;
-            position: relative;
-            font-family: 'Qamara', 'Cairo', sans-serif;
-            margin-bottom: 5px;
-        }
-
-        .notes-list li::before {
-            content: '•';
-            position: absolute;
-            right: 0;
-            color: #bba67b;
-            font-weight: 700;
+            gap: 20px;
         }
 
         /* حقول المعلومات بشكل مضغوط */
         .info-fields {
             background: rgba(255, 255, 255, 0.9);
-            padding: 18px 22px;
-            border-radius: 10px;
+            padding: 16px 22px;
+            border-radius: 9px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             border-right: 3px solid #bba67b;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 11px;
         }
 
         .info-row-compact {
@@ -251,23 +183,65 @@
             flex: 1;
         }
 
+        /* قسم الملاحظات */
+        .notes-section {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 16px 22px;
+            border-radius: 9px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            border-right: 3px solid #bba67b;
+        }
+
+        .notes-title {
+            color: #022423;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-family: 'Qamara', 'Cairo', sans-serif;
+        }
+
+        .notes-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .notes-list li {
+            color: #2c3e50;
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.8;
+            padding-right: 15px;
+            position: relative;
+            font-family: 'Qamara', 'Cairo', sans-serif;
+            margin-bottom: 6px;
+        }
+
+        .notes-list li::before {
+            content: '•';
+            position: absolute;
+            right: 0;
+            color: #bba67b;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
         /* QR Code على اليسار */
         .qr-section {
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .qr-container {
-            width: 220px;
-            height: 220px;
+            width: 200px;
+            height: 200px;
             background: #ffffff;
-            border-radius: 15px;
-            padding: 15px;
-            border: 4px solid #bba67b;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 12px;
+            border: 3.5px solid #bba67b;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -277,7 +251,7 @@
             width: 100%;
             height: 100%;
             background: #ffffff;
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -296,42 +270,47 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 15px;
             color: #999;
             text-align: center;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 600;
         }
 
         .qr-label {
             color: #022423;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             text-align: center;
             font-family: 'Qamara', 'Cairo', sans-serif;
-            max-width: 220px;
+            max-width: 200px;
             line-height: 1.5;
         }
 
-        /* الفوتر الجديد - على كامل العرض */
+        /* الفوتر - نفس الأمامية */
         .card-footer {
             background: linear-gradient(135deg, #022423 0%, #034544 100%);
-            padding: 25px 50px;
+            padding: 18px 45px;
             position: relative;
             z-index: 2;
             border-top: 3px solid #bba67b;
             flex-shrink: 0;
+            min-height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .footer-content {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
+            width: 100%;
         }
 
         .footer-title {
             color: #bba67b;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
             text-align: center;
             font-family: 'Qamara', 'Cairo', sans-serif;
@@ -341,23 +320,48 @@
         .security-note {
             text-align: center;
             color: rgba(255, 255, 255, 0.6);
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 400;
-            margin-top: 8px;
             letter-spacing: 0.3px;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
-        /* للطباعة */
+        /* للطباعة - نفس الأمامية */
         @media print {
+            @page {
+                size: 1011px 638px;
+                margin: 0;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            html {
+                width: 1011px;
+                height: 638px;
+            }
+
             body {
-                background: white;
+                width: 1011px;
+                height: 638px;
+                margin: 0;
                 padding: 0;
+                background: white;
+                display: block;
+                min-height: auto;
             }
 
             .id-card-back {
+                width: 1011px !important;
+                height: 638px !important;
                 box-shadow: none;
+                border-radius: 0;
+                margin: 0;
                 page-break-inside: avoid;
+                page-break-after: avoid;
+                page-break-before: avoid;
             }
         }
     </style>
@@ -365,10 +369,6 @@
 
 <body>
     <div class="id-card-back">
-        <!-- الأشرطة -->
-        <!-- <div class="flag-stripe"></div>
-        <div class="flag-stripe-bottom"></div> -->
-
         <!-- الزخرفة الخفيفة -->
         <div class="decorative-pattern"></div>
 
@@ -385,7 +385,7 @@
                 <!-- شعار الوزارة في أقصى اليسار -->
                 <div class="logo-container">
                     {% if logo_url %}
-                    <img src="{{ logo_url }}" alt="الجمهورية العربية السورية" alt="شعار الوزارة" onerror="this.style.display='none'">
+                    <img src="{{ logo_url }}" alt="شعار الوزارة" onerror="this.style.display='none'">
                     {% endif %}     
                </div>
             </div>
@@ -395,16 +395,6 @@
         <div class="back-content">
             <!-- المعلومات على اليمين -->
             <div class="info-section">
-                <!-- الملاحظات في الأعلى -->
-                <div class="notes-section">
-                    <div class="notes-title">ملاحظات:</div>
-                    <ul class="notes-list">
-                        <li>هذه البطاقة شخصية وغير قابلة للتداول.</li>
-                        <li>في حال فقدانها، يجب إبلاغ دائرة التنمية الإدارية فورًا.</li>
-                        <li>تبرز هذه البطاقة فيما خصصت لأجله.</li>
-                    </ul>
-                </div>
-
                 <!-- حقول المعلومات بشكل مضغوط -->
                 <div class="info-fields">
                     <div class="info-row-compact">
@@ -422,6 +412,16 @@
                         <span class="info-value-compact">{{ expiry_date | default('') }}</span>
                     </div>
                 </div>
+
+                <!-- الملاحظات  -->
+                <div class="notes-section">
+                    <div class="notes-title">ملاحظات:</div>
+                    <ul class="notes-list">
+                        <li>هذه البطاقة شخصية وغير قابلة للتداول.</li>
+                        <li>في حال فقدانها، يجب إبلاغ دائرة التنمية الإدارية فورًا.</li>
+                        <li>تبرز هذه البطاقة فيما خصصت لأجله.</li>
+                    </ul>
+                </div>
             </div>
 
             <!-- QR Code على اليسار -->
@@ -435,7 +435,6 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="qr-label">امسح الرمز للتحقق من البطاقة</div>
             </div>
         </div>
 

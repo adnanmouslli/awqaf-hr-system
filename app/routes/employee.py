@@ -104,7 +104,9 @@ def import_employees(user_id):
             'البدلات': 'allowances',
             'تاريخ بداية التأمين': 'insurance_start_date',
             'تاريخ نهاية التأمين': 'insurance_end_date',
-            'ملاحظات': 'notes'
+            'ملاحظات': 'notes',
+            'مكان العمل': 'work_location',
+            'الدائرة / الشعبة': 'division_section'
         }, inplace=True)
         
         # Check for required columns
@@ -133,7 +135,7 @@ def import_employees(user_id):
             'full_name', 'employee_type', 'job_title_name', 'profession_name',
             'certificates', 'place_of_birth', 'national_id', 'id_card_number',
             'contract_type', 'residence', 'mobile_1', 'mobile_2', 'mobile_3',
-            'work_system', 'notes'
+            'work_system', 'notes', 'work_location', 'division_section'
         ]
         df[string_cols] = df[string_cols].fillna('')
 
@@ -354,7 +356,9 @@ def import_employees(user_id):
                     insurance_start_date=data.get('insurance_start_date'),
                     insurance_end_date=data.get('insurance_end_date'),
                     notes=str(data.get('notes', '')).strip() or None,
-                    certificates=str(data.get('certificates', '')).strip() or None
+                    certificates=str(data.get('certificates', '')).strip() or None,
+                    work_location=str(data.get('work_location', '')).strip() or None,
+                    division_section=str(data.get('division_section', '')).strip() or None
                 )
                 
                 db.session.add(employee)
@@ -575,6 +579,9 @@ def create_employee(user_id):
             contact_number=data.get('contact_number'),
             blood_type=data.get('blood_type'),
             card_expiry_date=card_expiry_date_value,
+            # حقول مكان العمل والدائرة/الشعبة
+            work_location=data.get('work_location'),
+            division_section=data.get('division_section'),
         )
         
         # إذا لم يتم تحديد سعر اليوم أو الساعة، احسبهما تلقائياً
@@ -618,6 +625,9 @@ def create_employee(user_id):
             'contact_number': employee.contact_number,
             'blood_type': employee.blood_type,
             'card_expiry_date': employee.card_expiry_date.isoformat() if employee.card_expiry_date else None,
+            # حقول مكان العمل والدائرة/الشعبة
+            'work_location': employee.work_location,
+            'division_section': employee.division_section,
         }}), 201
 
     except Exception as e:
@@ -706,6 +716,9 @@ def get_all_employees(user):
             'contact_number': emp.contact_number,
             'blood_type': emp.blood_type,
             'card_expiry_date': emp.card_expiry_date.isoformat() if emp.card_expiry_date else None,
+            # حقول مكان العمل والدائرة/الشعبة
+            'work_location': emp.work_location,
+            'division_section': emp.division_section,
         })
 
     return jsonify(result), 200
@@ -840,6 +853,9 @@ def get_employee(user_id, id):
         'contact_number': employee.contact_number,
         'blood_type': employee.blood_type,
         'card_expiry_date': employee.card_expiry_date.isoformat() if employee.card_expiry_date else None,
+        # حقول مكان العمل والدائرة/الشعبة
+        'work_location': employee.work_location,
+        'division_section': employee.division_section,
     }), 200
 
 
@@ -925,6 +941,9 @@ def get_employee_by_barcode(user_id, barcode):
         'contact_number': employee.contact_number,
         'blood_type': employee.blood_type,
         'card_expiry_date': employee.card_expiry_date.isoformat() if employee.card_expiry_date else None,
+        # حقول مكان العمل والدائرة/الشعبة
+        'work_location': employee.work_location,
+        'division_section': employee.division_section,
     }), 200
 
 
@@ -1130,6 +1149,13 @@ def update_employee(user_id, id):
         if 'card_expiry_date' in data:
             employee.card_expiry_date = process_date(data['card_expiry_date'])
 
+        # معالجة حقول مكان العمل والدائرة/الشعبة
+        if 'work_location' in data:
+            employee.work_location = data.get('work_location')
+
+        if 'division_section' in data:
+            employee.division_section = data.get('division_section')
+
         # معالجة الملفات إذا تم تقديمها
         if certificate_file and certificate_file.filename != '' and allowed_file(certificate_file.filename):
             filename = secure_filename(certificate_file.filename)
@@ -1204,6 +1230,9 @@ def update_employee(user_id, id):
                 'barcode_image_path': employee.barcode_image_path,
                 'logo_path': employee.logo_path,
                 'photo_path': employee.photo_path,
+                # حقول مكان العمل والدائرة/الشعبة
+                'work_location': employee.work_location,
+                'division_section': employee.division_section,
             }
         }), 200
 
@@ -1451,7 +1480,10 @@ def classify_employees(current_user):
             'branch_name': branch_name,
             'department_id': emp.department_id,
             'department_name': department_name,
-            'is_manager': is_manager
+            'is_manager': is_manager,
+            # حقول مكان العمل والدائرة/الشعبة
+            'work_location': emp.work_location,
+            'division_section': emp.division_section,
         }
 
         if is_manager:

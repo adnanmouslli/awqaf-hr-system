@@ -63,6 +63,20 @@ def get_id_card_front(current_user, emp_id):
         republic_logo_url = f"{base_url}/uploads/Syrian_Arab_Republic.png"
         logo_url = f"{base_url}/uploads/logo.png"
 
+        # تحضير تاريخ ومكان الولادة
+        birth_date_str = employee.date_of_birth.strftime('%Y/%m/%d') if employee.date_of_birth else ''
+        birth_place_str = employee.place_of_birth or ''
+
+        # دمج تاريخ ومكان الولادة
+        if birth_date_str and birth_place_str:
+            birth_date_place = f"{birth_date_str} - {birth_place_str}"
+        elif birth_date_str:
+            birth_date_place = birth_date_str
+        elif birth_place_str:
+            birth_date_place = birth_place_str
+        else:
+            birth_date_place = 'غير محدد'
+
         # عرض القالب
         return render_template(
             'id_card_front.html',
@@ -71,6 +85,7 @@ def get_id_card_front(current_user, emp_id):
             employee_type=employee_type_ar,
             position=job_title_name or 'غير محدد',
             national_id=employee.national_id or 'غير محدد',
+            birth_date_place=birth_date_place,
             photo_url=photo_url,
             logo_url=logo_url,
             republic_logo_url=republic_logo_url,
@@ -115,7 +130,10 @@ def get_id_card_back(current_user, emp_id):
             qr_code_url=qr_code_url,
             logo_url=logo_url,
             republic_logo_url=republic_logo_url,
-            ministry_name='وزارة الأوقاف'
+            ministry_name='وزارة الأوقاف',
+            workplace=employee.work_location or 'غير محدد',
+            department=employee.division_section or 'غير محدد',
+            expiry_date=employee.card_expiry_date.strftime('%Y/%m/%d') if employee.card_expiry_date else 'غير محدد'
         ), 200
 
     except Exception as e:

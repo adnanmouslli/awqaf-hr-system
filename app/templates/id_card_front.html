@@ -37,11 +37,13 @@
             justify-content: center;
         }
 
+        /* حجم البطاقة الستاندر: 85.6mm × 53.98mm 
+           للطباعة بدقة 300 DPI: 1011px × 638px تقريباً */
         .id-card {
-            width: 1050px;
-            height: 650px;
+            width: 1011px;
+            height: 638px;
             background: #edebe0;
-            border-radius: 20px;
+            border-radius: 15px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
             position: relative;
             overflow: hidden;
@@ -63,42 +65,14 @@
             z-index: 0;
         }
 
-        /* شريط علوي بألوان العلم */
-        .flag-stripe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg,
-                #022423 0%, #022423 33.33%,
-                #ffffff 33.33%, #ffffff 66.66%,
-                #000000 66.66%, #000000 100%);
-            z-index: 4;
-        }
-
-        /* شريط سفلي بألوان العلم */
-        .flag-stripe-bottom {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg,
-                #022423 0%, #022423 33.33%,
-                #ffffff 33.33%, #ffffff 66.66%,
-                #000000 66.66%, #000000 100%);
-            z-index: 4;
-        }
-
         /* الرأسية */
         .card-header {
             background: linear-gradient(135deg, #022423 0%, #034544 50%, #022423 100%);
-            height: 140px;
+            height: 125px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 50px;
+            padding: 0 45px;
             position: relative;
             z-index: 2;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
@@ -121,7 +95,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            gap: 40px;
+            gap: 35px;
             position: relative;
         }
 
@@ -132,7 +106,7 @@
         }
 
         .republic-logo {
-            height: 50px;
+            height: 45px;
             object-fit: contain;
             filter: brightness(1.1) drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
         }
@@ -144,38 +118,40 @@
 
         .ministry-name {
             color: #bba67b;
-            font-size: 42px;
-            font-weight: 700;
+            font-size: 26px;
+            font-weight: 600;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            letter-spacing: 1px;
-            line-height: 1.3;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
             font-family: 'Qamara', 'Cairo', sans-serif;
+            margin-bottom: 6px;
         }
 
         .ministry-location {
             color: #bba67b;
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 36px;
+            font-weight: 800;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            letter-spacing: 0.5px;
-            margin-top: 5px;
+            letter-spacing: 1px;
+            margin-top: 0;
             font-family: 'Qamara', 'Cairo', sans-serif;
+            line-height: 1.3;
         }
 
         /* شعار الوزارة - أقصى اليسار */
         .logo-container {
             position: absolute;
             left: 0;
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .logo-container img {
-            max-width: 110px;
-            max-height: 110px;
+            max-width: 100px;
+            max-height: 100px;
             object-fit: contain;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
@@ -183,11 +159,12 @@
         /* محتوى البطاقة */
         .card-body {
             display: flex;
-            padding: 45px 50px 30px 50px;
-            gap: 40px;
+            padding: 40px 45px 25px 45px;
+            gap: 35px;
             position: relative;
             z-index: 2;
             flex: 1;
+            align-items: flex-start;
         }
 
         /* صورة الموظف */
@@ -197,14 +174,14 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 0;
         }
 
         .employee-photo {
-            width: 230px;
-            height: 290px;
-            border-radius: 15px;
-            border: 4px solid #bba67b;
+            width: 215px;
+            height: 270px;
+            border-radius: 12px;
+            border: 3.5px solid #bba67b;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
             overflow: hidden;
             background: #ffffff;
@@ -225,18 +202,8 @@
             justify-content: center;
             background: linear-gradient(135deg, #f0f0f0 0%, #f8f8f8 100%);
             color: #999;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
-        }
-
-        /* نص بطاقة موظف تحت الصورة */
-        .employee-badge-text {
-            color: #022423;
-            font-size: 22px;
-            font-weight: 700;
-            text-align: center;
-            font-family: 'Qamara', 'Cairo', sans-serif;
-            letter-spacing: 0.5px;
         }
 
         /* معلومات الموظف */
@@ -244,19 +211,20 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            gap: 16px;
+            justify-content: flex-start;
+            gap: 14px;
         }
 
         .info-row {
             display: flex;
             align-items: center;
             background: rgba(255, 255, 255, 0.9);
-            padding: 13px 25px;
-            border-radius: 10px;
+            padding: 12px 22px;
+            border-radius: 9px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;
             border-right: 3px solid #bba67b;
+            min-height: 50px;
         }
 
         .info-row:hover {
@@ -267,53 +235,73 @@
         .info-label {
             color: #022423;
             font-weight: 700;
-            font-size: 18px;
-            min-width: 160px;
-            margin-left: 20px;
+            font-size: 17px;
+            min-width: 150px;
+            margin-left: 18px;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
         .info-value {
             color: #2c3e50;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 400;
             flex: 1;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
-        /* الفوتر - على كامل العرض */
+        /* الفوتر - فارغ */
         .card-footer {
             background: linear-gradient(135deg, #022423 0%, #034544 100%);
-            padding: 20px 50px;
+            padding: 18px 45px;
             position: relative;
             z-index: 2;
             border-top: 3px solid #bba67b;
             flex-shrink: 0;
-            min-height: 70px;
+            min-height: 65px;
         }
 
-        /* للطباعة */
+        /* للطباعة - الحل الصحيح */
         @media print {
+            @page {
+                size: 1011px 638px;
+                margin: 0;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            html {
+                width: 1011px;
+                height: 638px;
+            }
+
             body {
-                background: white;
+                width: 1011px;
+                height: 638px;
+                margin: 0;
                 padding: 0;
+                background: white;
+                display: block;
+                min-height: auto;
             }
 
             .id-card {
+                width: 1011px !important;
+                height: 638px !important;
                 box-shadow: none;
+                border-radius: 0;
+                margin: 0;
                 page-break-inside: avoid;
+                page-break-after: avoid;
+                page-break-before: avoid;
             }
         }
     </style>
 </head>
 <body>
     <div class="id-card">
-        <!-- شريط العلم العلوي -->
-        <!-- <div class="flag-stripe"></div> -->
-
-        <!-- شريط العلم السفلي -->
-        <!-- <div class="flag-stripe-bottom"></div> -->
-
         <!-- الزخرفة الخفيفة -->
         <div class="decorative-pattern"></div>
 
@@ -336,7 +324,7 @@
                 <!-- شعار الوزارة في أقصى اليسار -->
                 <div class="logo-container">
                     {% if logo_url %}
-                    <img src="{{ logo_url }}" alt="الجمهورية العربية السورية" alt="شعار الوزارة" onerror="this.style.display='none'">
+                    <img src="{{ logo_url }}" alt="شعار الوزارة" onerror="this.style.display='none'">
                     {% endif %}
                 </div>
             </div>
@@ -353,8 +341,6 @@
                     <div class="photo-placeholder">صورة الموظف</div>
                     {% endif %}
                 </div>
-                <!-- نص بطاقة موظف -->
-                <div class="employee-badge-text">بطاقة موظف</div>
             </div>
 
             <!-- معلومات الموظف -->
@@ -382,7 +368,7 @@
             </div>
         </div>
 
-        <!-- الفوتر الجديد - فارغ -->
+        <!-- الفوتر - فارغ -->
         <div class="card-footer">
         </div>
     </div>

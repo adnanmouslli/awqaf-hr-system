@@ -58,6 +58,10 @@ class Employee(db.Model):
     blood_type = db.Column(db.String(5), nullable=True)  # زمرة الدم (A+, A-, B+, B-, AB+, AB-, O+, O-)
     card_expiry_date = db.Column(db.Date, nullable=True)  # تاريخ صلاحية البطاقة/تاريخ المنح
 
+    # حقول مكان العمل والدائرة/الشعبة
+    work_location = db.Column(db.String(255), nullable=True)  # مكان العمل
+    division_section = db.Column(db.String(255), nullable=True)  # الدائرة / الشعبة
+
     date_of_joining = db.Column(db.Date, nullable=True)  # موعد التعيين
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())  # تاريخ الإضافة
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())  # تاريخ التحديث
