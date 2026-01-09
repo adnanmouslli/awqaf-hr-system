@@ -1691,6 +1691,7 @@ def get_employee_public_info(barcode):
         'employee_type': employee.employee_type,
         'position': job_title_name,
         'profession': profession_name,
+        'mobile_1' : employee.mobile_1,
         'work_system': employee.work_system,
         'date_of_birth': employee.date_of_birth.isoformat() if employee.date_of_birth else None,
         'place_of_birth': employee.place_of_birth,
