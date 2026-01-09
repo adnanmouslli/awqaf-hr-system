@@ -69,7 +69,7 @@ def get_id_card_front(current_user, emp_id):
 
         # دمج تاريخ ومكان الولادة
         if birth_date_str and birth_place_str:
-            birth_date_place = f"{birth_date_str} - {birth_place_str}"
+            birth_date_place = f"{birth_place_str} - {birth_date_str}"
         elif birth_date_str:
             birth_date_place = birth_date_str
         elif birth_place_str:

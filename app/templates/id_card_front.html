@@ -159,7 +159,7 @@
         /* محتوى البطاقة */
         .card-body {
             display: flex;
-            padding: 40px 45px 25px 45px;
+            padding: 35px 45px 20px 45px;
             gap: 35px;
             position: relative;
             z-index: 2;
@@ -167,7 +167,7 @@
             align-items: flex-start;
         }
 
-        /* صورة الموظف */
+        /* صورة الموظف - مكبرة */
         .photo-section {
             flex-shrink: 0;
             position: relative;
@@ -178,8 +178,8 @@
         }
 
         .employee-photo {
-            width: 215px;
-            height: 270px;
+            width: 245px;
+            height: 305px;
             border-radius: 12px;
             border: 3.5px solid #bba67b;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
@@ -202,7 +202,7 @@
             justify-content: center;
             background: linear-gradient(135deg, #f0f0f0 0%, #f8f8f8 100%);
             color: #999;
-            font-size: 17px;
+            font-size: 19px;
             font-weight: 700;
         }
 
@@ -212,19 +212,19 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            gap: 14px;
+            gap: 15px;
         }
 
         .info-row {
             display: flex;
             align-items: center;
             background: rgba(255, 255, 255, 0.9);
-            padding: 12px 22px;
+            padding: 14px 22px;
             border-radius: 9px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             transition: all 0.3s ease;
             border-right: 3px solid #bba67b;
-            min-height: 50px;
+            min-height: 55px;
         }
 
         .info-row:hover {
@@ -235,21 +235,21 @@
         .info-label {
             color: #022423;
             font-weight: 700;
-            font-size: 17px;
-            min-width: 150px;
+            font-size: 19px;
+            min-width: 160px;
             margin-left: 18px;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
         .info-value {
             color: #2c3e50;
-            font-size: 17px;
+            font-size: 19px;
             font-weight: 400;
             flex: 1;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
-        /* الفوتر - فارغ */
+        /* الفوتر - نفس الوجه الخلفي */
         .card-footer {
             background: linear-gradient(135deg, #022423 0%, #034544 100%);
             padding: 18px 45px;
@@ -354,7 +354,7 @@
                     <span class="info-value">{{ full_name | default('غير محدد') }}</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">تاريخ ومحل الولادة:</span>
+                    <span class="info-label">محل وتاريخ الولادة:</span>
                     <span class="info-value">{{ birth_date_place | default('غير محدد') }}</span>
                 </div>
                 <div class="info-row">
