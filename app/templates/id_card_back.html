@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البطاقة التعريفية - الوجه الخلفي</title>
+    <title>البطاقة التعريفية - الوجه الخلفي (تصميم بديل)</title>
     <style>
         * {
             margin: 0;
@@ -129,50 +129,47 @@
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
-        /* محتوى الوجه الخلفي */
+        /* محتوى الوجه الخلفي - تخطيط عمودي */
         .back-content {
-            padding: 35px 45px 25px 45px;
+            padding: 26px 45px 20px 45px;
             display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
+            flex-direction: column;
             flex: 1;
             position: relative;
             z-index: 2;
-            gap: 35px;
+            gap: 16px;
         }
 
-        /* قسم المعلومات على اليمين */
+        /* قسم المعلومات - بعرض كامل */
         .info-section {
-            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 14px;
         }
 
-        /* حقول المعلومات بشكل مضغوط */
+        /* حقول المعلومات */
         .info-fields {
             background: rgba(255, 255, 255, 0.9);
-            padding: 18px 22px;
+            padding: 16px 25px;
             border-radius: 9px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             border-right: 3px solid #bba67b;
-            display: flex;
-            flex-direction: column;
-            gap: 13px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px 25px;
         }
 
         .info-row-compact {
             display: flex;
-            align-items: baseline;
-            gap: 10px;
+            flex-direction: column;
+            gap: 5px;
         }
 
         .info-label-compact {
             color: #022423;
             font-weight: 700;
-            font-size: 19px;
+            font-size: 17px;
             font-family: 'Qamara', 'Cairo', sans-serif;
-            white-space: nowrap;
         }
 
         .info-value-compact {
@@ -180,13 +177,12 @@
             font-size: 19px;
             font-weight: 400;
             font-family: 'Qamara', 'Cairo', sans-serif;
-            flex: 1;
         }
 
         /* قسم الملاحظات */
         .notes-section {
             background: rgba(255, 255, 255, 0.9);
-            padding: 18px 22px;
+            padding: 16px 25px;
             border-radius: 9px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             border-right: 3px solid #bba67b;
@@ -196,24 +192,26 @@
             color: #022423;
             font-weight: 700;
             font-size: 19px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
         .notes-list {
             list-style: none;
             padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 30px;
         }
 
         .notes-list li {
             color: #2c3e50;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 400;
-            line-height: 1.9;
+            line-height: 1.6;
             padding-right: 18px;
             position: relative;
             font-family: 'Qamara', 'Cairo', sans-serif;
-            margin-bottom: 8px;
         }
 
         .notes-list li::before {
@@ -225,23 +223,22 @@
             font-size: 18px;
         }
 
-        /* QR Code على اليسار */
+        /* QR Code في الأسفل */
         .qr-section {
-            flex-shrink: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            gap: 30px;
         }
 
         .qr-container {
-            width: 230px;
-            height: 230px;
+            width: 160px;
+            height: 160px;
             background: #ffffff;
-            border-radius: 12px;
-            padding: 12px;
-            border: 3.5px solid #bba67b;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            padding: 8px;
+            border: 3px solid #bba67b;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -251,7 +248,7 @@
             width: 100%;
             height: 100%;
             background: #ffffff;
-            border-radius: 8px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -270,21 +267,34 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 14px;
             color: #999;
             text-align: center;
             border-radius: 6px;
             font-weight: 600;
         }
 
+        .qr-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
         .qr-label {
             color: #022423;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
-            text-align: center;
             font-family: 'Qamara', 'Cairo', sans-serif;
-            max-width: 200px;
-            line-height: 1.5;
+            line-height: 1.6;
+        }
+
+        .qr-description {
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 400;
+            font-family: 'Qamara', 'Cairo', sans-serif;
+            line-height: 1.7;
         }
 
         /* الفوتر - نفس الأمامية */
@@ -317,16 +327,7 @@
             letter-spacing: 0.5px;
         }
 
-        .security-note {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 11px;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-            font-family: 'Qamara', 'Cairo', sans-serif;
-        }
-
-        /* للطباعة - نفس الأمامية */
+        /* للطباعة */
         @media print {
             @page {
                 size: 1011px 638px;
@@ -393,17 +394,17 @@
 
         <!-- المحتوى -->
         <div class="back-content">
-            <!-- المعلومات على اليمين -->
+            <!-- قسم المعلومات -->
             <div class="info-section">
-                <!-- حقول المعلومات بشكل مضغوط -->
+                <!-- حقول المعلومات في صف واحد -->
                 <div class="info-fields">
                     <div class="info-row-compact">
-                        <span class="info-label-compact">مكان العمل:</span>
+                        <span class="info-label-compact">جهة العمل:</span>
                         <span class="info-value-compact">{{ workplace | default('') }}</span>
                     </div>
                     
                     <div class="info-row-compact">
-                        <span class="info-label-compact">الدائرة / الشعبة:</span>
+                        <span class="info-label-compact">الدائرة:</span>
                         <span class="info-value-compact">{{ department | default('') }}</span>
                     </div>
                     
@@ -413,7 +414,7 @@
                     </div>
                 </div>
 
-                <!-- الملاحظات  -->
+                <!-- الملاحظات في صفين -->
                 <div class="notes-section">
                     <div class="notes-title">ملاحظات:</div>
                     <ul class="notes-list">
@@ -424,7 +425,7 @@
                 </div>
             </div>
 
-            <!-- QR Code على اليسار -->
+            <!-- QR Code في الأسفل مع معلومات -->
             <div class="qr-section">
                 <div class="qr-container">
                     <div class="qr-code-wrapper">
@@ -434,6 +435,10 @@
                         <div class="qr-placeholder">QR Code</div>
                         {% endif %}
                     </div>
+                </div>
+                <div class="qr-info">
+                    <div class="qr-label">رمز التحقق الإلكتروني</div>
+                    <div class="qr-description">يمكن مسح هذا الرمز للتحقق من صحة البطاقة والحصول على معلومات إضافية حال الطوارئ.</div>
                 </div>
             </div>
         </div>

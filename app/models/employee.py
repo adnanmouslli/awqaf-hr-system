@@ -182,15 +182,59 @@ class Employee(db.Model):
                 # توليد QR Code
                 qr = qrcode.QRCode(
                     version=1,  # حجم QR Code (1-40)
-                    error_correction=qrcode.constants.ERROR_CORRECT_L,
+                    error_correction=qrcode.constants.ERROR_CORRECT_H,  # أعلى مستوى تصحيح للأخطاء لدعم اللوغو
                     box_size=10,  # حجم كل مربع في QR Code
-                    border=4,  # حجم الإطار حول QR Code
+                    border=0,  # حجم الإطار حول QR Code (0 لإزالة الحواف)
                 )
                 qr.add_data(employee_url)
                 qr.make(fit=True)
 
-                # إنشاء صورة QR Code
-                qr_image = qr.make_image(fill_color="black", back_color="white")
+                # إنشاء صورة QR Code بألوان متناسقة مع البطاقة
+                # اللون الأساسي: #034544 (لون الهيدر) أو #022423 (الأخضر الداكن)
+                # اللون الثانوي: #edebe0 (لون خلفية البطاقة) أو white للوضوح
+                qr_image = qr.make_image(fill_color="#034544", back_color="white")
+
+                # تحويل الصورة إلى RGBA لدعم الشفافية
+                qr_image = qr_image.convert('RGBA')
+
+                # إضافة لوغو الوزارة في المنتصف (إذا كان موجوداً)
+                logo_path = os.path.join(upload_folder, 'logo.png')  # مسار لوغو الوزارة
+                if os.path.exists(logo_path):
+                    try:
+                        logo = Image.open(logo_path)
+
+                        # التأكد من أن اللوغو بصيغة RGBA لدعم الشفافية
+                        if logo.mode != 'RGBA':
+                            logo = logo.convert('RGBA')
+
+                        # حساب حجم اللوغو مع الحفاظ على النسب الأصلية
+                        qr_width, qr_height = qr_image.size
+                        logo_original_width, logo_original_height = logo.size
+
+                        # تحديد الحجم الأقصى للوغو (30% من حجم QR)
+                        max_logo_size = min(qr_width, qr_height) // 3
+
+                        # حساب النسبة للحفاظ على أبعاد الصورة الأصلية
+                        width_ratio = max_logo_size / logo_original_width
+                        height_ratio = max_logo_size / logo_original_height
+                        resize_ratio = min(width_ratio, height_ratio)
+
+                        # حساب الأبعاد الجديدة مع الحفاظ على النسب
+                        new_width = int(logo_original_width * resize_ratio)
+                        new_height = int(logo_original_height * resize_ratio)
+
+                        # تغيير حجم اللوغو مع الحفاظ على الجودة والنسب
+                        logo = logo.resize((new_width, new_height), Image.Resampling.LANCZOS)
+
+                        # لصق اللوغو مباشرة في منتصف QR Code (بدون خلفية بيضاء)
+                        logo_pos = ((qr_width - new_width) // 2,
+                                   (qr_height - new_height) // 2)
+
+                        # استخدام alpha channel للوغو للحفاظ على الشفافية
+                        qr_image.paste(logo, logo_pos, logo)
+
+                    except Exception as e:
+                        print(f"Warning: Could not add logo to QR Code: {str(e)}")
 
                 # حفظ QR Code كصورة
                 barcode_filename = f"{self.fingerprint_id}_qrcode.png"
