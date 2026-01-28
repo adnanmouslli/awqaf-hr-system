@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البطاقة التعريفية - الوجه الخلفي (تصميم بديل)</title>
+    <title>البطاقة التعريفية - الوجه الخلفي</title>
     <style>
         * {
             margin: 0;
@@ -131,50 +131,58 @@
 
         /* محتوى الوجه الخلفي - تخطيط عمودي */
         .back-content {
-            padding: 26px 45px 20px 45px;
+            padding: 18px 45px 12px 45px;
+            /* قللنا أكثر */
             display: flex;
             flex-direction: column;
             flex: 1;
             position: relative;
             z-index: 2;
-            gap: 16px;
+            gap: 10px;
+            /* قللنا من 12px */
         }
 
         /* قسم المعلومات - بعرض كامل */
         .info-section {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 8px;
+            /* قللنا من 10px */
         }
 
         /* حقول المعلومات */
         .info-fields {
             background: rgba(255, 255, 255, 0.9);
-            padding: 16px 25px;
+            padding: 12px 25px;
+            /* قللنا من 14px */
             border-radius: 9px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             border-right: 3px solid #bba67b;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 14px 25px;
+            gap: 10px 20px;
+            /* قللنا */
         }
 
         .info-row-compact {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
+            /* قللنا من 5px */
         }
 
         .info-label-compact {
             color: #022423;
             font-weight: 700;
-            font-size: 17px;
+            font-size: 23px;
+            /* كان 18px - زاد بحوالي 30% */
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
         .info-value-compact {
             color: #2c3e50;
-            font-size: 19px;
+            font-size: 26px;
+            /* كان 20px - زاد بحوالي 30% */
             font-weight: 400;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
@@ -182,7 +190,8 @@
         /* قسم الملاحظات */
         .notes-section {
             background: rgba(255, 255, 255, 0.9);
-            padding: 16px 25px;
+            padding: 12px 25px;
+            /* قللنا من 14px */
             border-radius: 9px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             border-right: 3px solid #bba67b;
@@ -191,8 +200,10 @@
         .notes-title {
             color: #022423;
             font-weight: 700;
-            font-size: 19px;
-            margin-bottom: 10px;
+            font-size: 26px;
+            /* كان 20px - زاد بحوالي 30% */
+            margin-bottom: 6px;
+            /* قللنا من 8px */
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
@@ -201,15 +212,19 @@
             padding: 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px 30px;
+            gap: 5px 25px;
+            /* قللنا */
         }
 
         .notes-list li {
             color: #2c3e50;
-            font-size: 16px;
+            font-size: 21px;
+            /* كان 17px - زاد بحوالي 30% */
             font-weight: 400;
-            line-height: 1.6;
+            line-height: 1.4;
+            /* قللنا */
             padding-right: 18px;
+            /* قللنا */
             position: relative;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
@@ -220,7 +235,8 @@
             right: 0;
             color: #bba67b;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 23px;
+            /* كان 18px - زاد بحوالي 30% */
         }
 
         /* QR Code في الأسفل */
@@ -228,8 +244,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 30px;
-            /* padding-top: 3px; */
+            gap: 25px;
+            /* قللنا من 30px */
         }
 
         .qr-container {
@@ -268,7 +284,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 18px;
+            /* كان 14px - زاد بحوالي 30% */
             color: #999;
             text-align: center;
             border-radius: 6px;
@@ -279,23 +296,28 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
+            /* قللنا */
         }
 
         .qr-label {
             color: #022423;
-            font-size: 16px;
+            font-size: 22px;
+            /* كان 17px - زاد بحوالي 30% */
             font-weight: 700;
             font-family: 'Qamara', 'Cairo', sans-serif;
-            line-height: 1.6;
+            line-height: 1.4;
+            /* قللنا */
         }
 
         .qr-description {
             color: #2c3e50;
-            font-size: 14px;
+            font-size: 19px;
+            /* كان 15px - زاد بحوالي 30% */
             font-weight: 400;
             font-family: 'Qamara', 'Cairo', sans-serif;
-            line-height: 1.7;
+            line-height: 1.5;
+            /* قللنا */
         }
 
         /* الفوتر - نفس الأمامية */
@@ -321,7 +343,7 @@
 
         .footer-title {
             color: #bba67b;
-            font-size: 18px;
+            font-size: 19px;
             font-weight: 700;
             text-align: center;
             font-family: 'Qamara', 'Cairo', sans-serif;
@@ -419,9 +441,9 @@
                 <div class="notes-section">
                     <div class="notes-title">ملاحظات:</div>
                     <ul class="notes-list">
-                        <li>هذه البطاقة شخصية وغير قابلة للتداول.</li>
-                        <li>في حال فقدانها، يجب إبلاغ دائرة التنمية الإدارية فورًا.</li>
-                        <li>تبرز هذه البطاقة فيما خصصت لأجله.</li>
+                        <li>هذه البطاقة شخصية وغير قابلة للتداول</li>
+                        <li>في حال فقدانها، يجب إبلاغ دائرة التنمية الإدارية فورًا</li>
+                        <li>تبرز هذه البطاقة فيما خصصت لأجله</li>
                     </ul>
                 </div>
             </div>
@@ -437,8 +459,8 @@
                 </div>
                 <div class="qr-info">
                     <div class="qr-label">رمز التحقق الإلكتروني</div>
-                    <div class="qr-description">يمكن مسح هذا الرمز للتحقق من صحة البطاقة والحصول على معلومات إضافية عن
-                        الموظف.</div>
+                    <div class="qr-description">يمكن مسح هذا الرمز للتحقق من صحة البطاقة والحصول على معلومات إضافية حال
+                        الطوارئ.</div>
                 </div>
             </div>
         </div>
