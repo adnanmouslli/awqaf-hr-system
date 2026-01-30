@@ -106,7 +106,8 @@
         }
 
         .republic-logo {
-            height: 45px;
+            height: 50px;
+            width: auto;
             object-fit: contain;
             filter: brightness(1.1) drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
         }
@@ -131,58 +132,50 @@
 
         /* محتوى الوجه الخلفي - تخطيط عمودي */
         .back-content {
-            padding: 18px 45px 12px 45px;
-            /* قللنا أكثر */
+            padding: 20px 45px 16px 45px;
             display: flex;
             flex-direction: column;
             flex: 1;
             position: relative;
             z-index: 2;
-            gap: 10px;
-            /* قللنا من 12px */
+            gap: 16px;
         }
 
         /* قسم المعلومات - بعرض كامل */
         .info-section {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            /* قللنا من 10px */
+            gap: 16px;
         }
 
         /* حقول المعلومات */
         .info-fields {
             background: rgba(255, 255, 255, 0.9);
-            padding: 12px 25px;
-            /* قللنا من 14px */
+            padding: 14px 28px;
             border-radius: 9px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             border-right: 3px solid #bba67b;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px 20px;
-            /* قللنا */
+            gap: 12px 22px;
         }
 
         .info-row-compact {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            /* قللنا من 5px */
+            gap: 5px;
         }
 
         .info-label-compact {
             color: #022423;
             font-weight: 700;
-            font-size: 23px;
-            /* كان 18px - زاد بحوالي 30% */
+            font-size: 24px;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
         .info-value-compact {
             color: #2c3e50;
-            font-size: 26px;
-            /* كان 20px - زاد بحوالي 30% */
+            font-size: 24px;
             font-weight: 400;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
@@ -190,8 +183,7 @@
         /* قسم الملاحظات */
         .notes-section {
             background: rgba(255, 255, 255, 0.9);
-            padding: 12px 25px;
-            /* قللنا من 14px */
+            padding: 14px 28px;
             border-radius: 9px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             border-right: 3px solid #bba67b;
@@ -201,9 +193,7 @@
             color: #022423;
             font-weight: 700;
             font-size: 26px;
-            /* كان 20px - زاد بحوالي 30% */
-            margin-bottom: 6px;
-            /* قللنا من 8px */
+            margin-bottom: 10px;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
 
@@ -212,19 +202,15 @@
             padding: 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2px 10px;
-            /* قللنا المسافة بين الأسطر وقربنا الأعمدة */
+            gap: 6px 18px;
         }
 
         .notes-list li {
             color: #2c3e50;
             font-size: 21px;
-            /* كان 17px - زاد بحوالي 30% */
             font-weight: 400;
-            line-height: 1.4;
-            /* قللنا */
-            padding-right: 18px;
-            /* قللنا */
+            line-height: 1.5;
+            padding-right: 22px;
             position: relative;
             font-family: 'Qamara', 'Cairo', sans-serif;
         }
@@ -235,8 +221,7 @@
             right: 0;
             color: #bba67b;
             font-weight: 700;
-            font-size: 23px;
-            /* كان 18px - زاد بحوالي 30% */
+            font-size: 26px;
         }
 
         /* QR Code في الأسفل */
@@ -244,13 +229,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 25px;
-            /* قللنا من 30px */
+            gap: 28px;
         }
 
         .qr-container {
-            width: 160px;
-            height: 160px;
+            width: 140px;
+            height: 140px;
             background: #ffffff;
             border-radius: 10px;
             padding: 8px;
@@ -259,6 +243,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .qr-code-wrapper {
@@ -285,7 +270,6 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            /* كان 14px - زاد بحوالي 30% */
             color: #999;
             text-align: center;
             border-radius: 6px;
@@ -296,28 +280,23 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            /* قللنا */
+            gap: 6px;
         }
 
         .qr-label {
             color: #022423;
             font-size: 22px;
-            /* كان 17px - زاد بحوالي 30% */
             font-weight: 700;
             font-family: 'Qamara', 'Cairo', sans-serif;
             line-height: 1.4;
-            /* قللنا */
         }
 
         .qr-description {
             color: #2c3e50;
             font-size: 19px;
-            /* كان 15px - زاد بحوالي 30% */
             font-weight: 400;
             font-family: 'Qamara', 'Cairo', sans-serif;
             line-height: 1.5;
-            /* قللنا */
         }
 
         /* الفوتر - نفس الأمامية */
@@ -343,7 +322,7 @@
 
         .footer-title {
             color: #bba67b;
-            font-size: 19px;
+            font-size: 22px;
             font-weight: 700;
             text-align: center;
             font-family: 'Qamara', 'Cairo', sans-serif;
